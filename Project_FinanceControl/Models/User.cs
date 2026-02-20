@@ -22,6 +22,6 @@ public class User
     public string? Password { get; set; }
 
     public DateTime DateCreated { get; set; }
-    public List<Transaction> Transactions { get; set; }
-    public List<Category> Categories { get; set; }
+    public ICollection<Transaction>? Transactions { get; set; }
+    public ICollection<Category>? Categories { get; set; }
 }

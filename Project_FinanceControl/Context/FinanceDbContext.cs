@@ -1,7 +1,6 @@
-﻿using FinanceCotrol.Models;
+using FinanceCotrol.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Transactions;
 
 namespace FinanceCotrol.Context;
 
