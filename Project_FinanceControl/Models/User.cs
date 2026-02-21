@@ -11,11 +11,11 @@ public class User
 
     [Required]
     [StringLength(150)]
-    public string? Name { get; set; }
+    public string? UserName { get; set; }
 
     [Required]
     [StringLength(200)]
-    public string? Email { get; set; }
+    public string? UserEmail { get; set; }
 
     [Required]
     [StringLength(20)]

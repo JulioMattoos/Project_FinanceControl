@@ -29,10 +29,10 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<User> Get(int id)
     {
-        var user = _context.Users.Find(id);
+        var user = _context.Users.FirstOrDefault(c=> c.UserId == id);
         if(user == null)
         {
-            return NotFound("Id invalido");
+            return NotFound("Usuario não encontrado...");
         }
         return Ok(user);
     }

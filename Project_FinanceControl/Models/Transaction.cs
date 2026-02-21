@@ -11,12 +11,12 @@ public class Transaction
 
     [Required]
     [StringLength(150)]
-    public string? Description { get; set; }
+    public string? TransactionDescription { get; set; }
 
     public DateTime Date { get; set; }
     public TransactionType Type { get; set; }
     public int UserId { get; set; }
-    public User? User { get; set; }
+    public User? UserName { get; set; }
     public int CategoryId { get; set; }
-    public Category? Category { get; set; }
+    public Category? CategoryName { get; set; }
 }

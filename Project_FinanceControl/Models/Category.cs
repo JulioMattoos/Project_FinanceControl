@@ -12,9 +12,9 @@ public class Category
 
     [Required]
     [StringLength(40)]
-    public string? Name { get; set; }
+    public string? CategoryName { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     public User? User { get; set; }
-    public Transaction Transaction { get; set; }
+    public Transaction? Transaction { get; set; }
 }
