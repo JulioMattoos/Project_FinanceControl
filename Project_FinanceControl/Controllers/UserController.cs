@@ -19,15 +19,23 @@ public class UserController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<User>> Get()
     {
-        var users = _context.Users.ToList();
-        if (users == null)
+        try
         {
-            return BadRequest("Usuarios não encontrados...");
+            var users = _context.Users.Take(50).ToList();
+            if (users == null)
+            {
+                return BadRequest("Usuarios não encontrados...");
+            }
+            return Ok(users);
         }
-        return Ok(users);
+        catch (Exception)
+        {
+            return StatusCode(500, "Ocorreu um erro ao processar a solicitação.");
+        }
+        ;
     }
 
-    [HttpGet("{id}", Name = "ObterUsuario")]
+    [HttpGet("{id:int:min(1)}", Name = "ObterUsuario")]
     public ActionResult<User> Get(int id)
     {
         var user = _context.Users.FirstOrDefault(c => c.UserId == id);
@@ -51,7 +59,7 @@ public class UserController : ControllerBase
             new { id = user.UserId }, user);
     }
 
-    [HttpPut("{id:int}/user-update")]
+    [HttpPut("{id:int:min(1)}/user-update")]
     public ActionResult Put(int id, User user)
     {
         if (id != user.UserId)

@@ -19,7 +19,7 @@ namespace Project_FinanceControl.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Category>> Get()
         {
-            var categories = _context.Categories.Include(c => c.User).ToList();
+            var categories = _context.Categories.Include(c => c.User).Where(c => c.CategoryId <= 30).AsNoTracking().ToList();
             if (categories == null)
             {
                 return BadRequest("Categorias não encontradas...");
@@ -31,7 +31,7 @@ namespace Project_FinanceControl.Controllers
         public ActionResult<Category> Get(int id)
         {
             var category = _context.Categories
-                .Include(c => c.User)
+                .Include(c => c.User).AsNoTracking()
                 .FirstOrDefault(c => c.CategoryId == id);
             if (category == null)
             {
