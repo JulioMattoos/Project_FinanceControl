@@ -24,7 +24,7 @@ namespace Project_FinanceControl.Controllers
             }
             _context.Transactions.Remove(transaction);
             _context.SaveChanges();
-            return Ok("Transaçao removida com sucesso...")
+            return Ok("Transaçao removida com sucesso...");
         }
     }
 }
