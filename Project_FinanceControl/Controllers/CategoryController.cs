@@ -17,9 +17,9 @@ namespace Project_FinanceControl.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Category>> Get()
+        public async Task<ActionResult<IEnumerable<Category>>> Get()
         {
-            var categories = _context.Categories.Include(c => c.User).Where(c => c.CategoryId <= 30).AsNoTracking().ToList();
+            var categories = await _context.Categories.Include(c => c.User).Where(c => c.CategoryId <= 30).AsNoTracking().ToListAsync();
             if (categories == null)
             {
                 return BadRequest("Categorias não encontradas...");
@@ -27,12 +27,12 @@ namespace Project_FinanceControl.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{id}", Name = "ObterCategoria")]
-        public ActionResult<Category> Get(int id)
+        [HttpGet("{id:int:min(1)}", Name = "ObterCategoria")]
+        public async Task<ActionResult<Category>> Get(int id)
         {
-            var category = _context.Categories
+            var category = await _context.Categories
                 .Include(c => c.User).AsNoTracking()
-                .FirstOrDefault(c => c.CategoryId == id);
+                .FirstOrDefaultAsync(c => c.CategoryId == id);
             if (category == null)
             {
                 return NotFound("Categoria não encontrada...");
@@ -53,7 +53,7 @@ namespace Project_FinanceControl.Controllers
                  new { id = category.CategoryId }, category);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int:min(1)}")]
         public ActionResult Put(int id, Category category)
         {
             if (id != category.CategoryId)
@@ -65,7 +65,7 @@ namespace Project_FinanceControl.Controllers
             return Ok(category);
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int:min(1)}")]
         public ActionResult Delete(int id)
         {
             var category = _context.Categories.FirstOrDefault(c => c.CategoryId == id);

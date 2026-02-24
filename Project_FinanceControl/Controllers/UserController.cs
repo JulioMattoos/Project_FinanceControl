@@ -2,6 +2,7 @@
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace FinanceCotrol.Controllers;
 
@@ -17,11 +18,11 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<User>> Get()
+    public async Task<ActionResult<IEnumerable<User>>> Get()
     {
         try
         {
-            var users = _context.Users.Take(50).ToList();
+            var users = await _context.Users.Take(50).ToListAsync();
             if (users == null)
             {
                 return BadRequest("Usuarios não encontrados...");
@@ -36,9 +37,9 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id:int:min(1)}", Name = "ObterUsuario")]
-    public ActionResult<User> Get(int id)
+    public async Task<ActionResult<User>> Get(int id)
     {
-        var user = _context.Users.FirstOrDefault(c => c.UserId == id);
+        var user = await _context.Users.FirstOrDefaultAsync(c => c.UserId == id);
         if (user == null)
         {
             return NotFound("Usuario não encontrado...");
@@ -71,7 +72,7 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int:min(1)}")]
     public ActionResult Delete(int id)
     {
         var user = _context.Users.Find(id);
