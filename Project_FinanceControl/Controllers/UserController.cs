@@ -2,7 +2,6 @@
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace FinanceCotrol.Controllers;
 
@@ -37,7 +36,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id:int:min(1)}", Name = "ObterUsuario")]
-    public async Task<ActionResult<User>> Get(int id)
+    public async Task<ActionResult<User>> Get([FromQuery] int id)
     {
         var user = await _context.Users.FirstOrDefaultAsync(c => c.UserId == id);
         if (user == null)
