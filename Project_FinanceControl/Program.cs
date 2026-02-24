@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using FinanceCotrol.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,11 @@ string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConne
 
 builder.Services.AddDbContext<FinanceDbContext>(options =>
     options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.DisableImplicitFromServicesParameters = true;
+});
 
 builder.Services.AddControllers();
 

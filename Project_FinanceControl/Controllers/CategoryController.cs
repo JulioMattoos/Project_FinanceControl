@@ -40,7 +40,7 @@ namespace Project_FinanceControl.Controllers
             return Ok(category);
         }
 
-        [HttpPost]
+        [HttpPost("/newCategory")]
         public ActionResult Post(Category category)
         {
             if (category == null)
@@ -53,7 +53,7 @@ namespace Project_FinanceControl.Controllers
                  new { id = category.CategoryId }, category);
         }
 
-        [HttpPut("{id:int:min(1)}")]
+        [HttpPut("/update {id:int:min(1)}")]
         public ActionResult Put(int id, Category category)
         {
             if (id != category.CategoryId)
