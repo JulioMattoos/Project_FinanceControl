@@ -1,6 +1,7 @@
 ﻿using FinanceCotrol.Context;
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace Project_FinanceControl.Controllers
@@ -27,12 +28,13 @@ namespace Project_FinanceControl.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{id:int:min(1)}", Name = "ObterCategoria")]
-        public async Task<ActionResult<Category>> Get(int id)
+        [HttpGet("{id:int:min(1)}", Name = "ObterCategoria")]  //alterado para fazer requisição pelo nome da categoria, mais "facil" para requição
+        public async Task<ActionResult<Category>> Get([FromBody][BindRequired] string name, int id)
         {
+            var categoryName = name;
             var category = await _context.Categories
                 .Include(c => c.User).AsNoTracking()
-                .FirstOrDefaultAsync(c => c.CategoryId == id);
+                .FirstOrDefaultAsync(c => c.CategoryName == name);
             if (category == null)
             {
                 return NotFound("Categoria não encontrada...");
@@ -40,7 +42,7 @@ namespace Project_FinanceControl.Controllers
             return Ok(category);
         }
 
-        [HttpPost("/newCategory")]
+        [HttpPost("/Register")]
         public ActionResult Post(Category category)
         {
             if (category == null)
