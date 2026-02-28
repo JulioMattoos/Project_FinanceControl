@@ -1,4 +1,4 @@
-﻿using FinanceCotrol.Context;
+using FinanceCotrol.Context;
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
