@@ -1,8 +1,7 @@
-using FinanceCotrol.Context;
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using Project_FinanceControl.Repository;
 
 namespace FinanceCotrol.Controllers;
 
@@ -10,32 +9,21 @@ namespace FinanceCotrol.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly FinanceDbContext _context;
+    private readonly IUserRepository _repository;
 
-    public UserController(FinanceDbContext context)
+    public UserController(IUserRepository repository)
     {
-        _context = context;
+        _repository = repository;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> Get()
+    public ActionResult<IEnumerable<User>> Get()
     {
-        try
-        {
-            var users = await _context.Users.Take(50).ToListAsync();
-            if (users == null)
-            {
-                return BadRequest("Usuarios não encontrados...");
-            }
-            return Ok(users);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "Ocorreu um erro ao processar a solicitação.");
-        }
-        ;
+        var users = _repository.GetAllUsers();
+        return Ok(users);
     }
 
+    //continuar implementação repository
     [HttpGet("{id:int:min(1)}", Name = "ObterUsuario")]
     public async Task<ActionResult<User>> Get(int id)
     {
