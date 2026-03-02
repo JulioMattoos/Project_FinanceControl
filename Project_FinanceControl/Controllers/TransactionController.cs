@@ -1,6 +1,7 @@
 ﻿using FinanceCotrol.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using FinanceCotrol.Models;
 
 namespace Project_FinanceControl.Controllers
 {
@@ -25,6 +26,19 @@ namespace Project_FinanceControl.Controllers
             }
             return Ok(transactions);
         }
+
+        [HttpPost(Name = "NewTrasaction")]
+        public ActionResult Post([FromBody] Transaction transaction)
+        {
+            if (transaction == null)
+            {
+                return BadRequest("Transação inválida...");
+            }
+            _context.Transactions.Add(transaction);
+            _context.SaveChanges();
+            return Ok("Transação cadastrada com sucesso...");
+        }
+
 
         [HttpDelete("{id:int}")]
         public ActionResult Delet(int id)

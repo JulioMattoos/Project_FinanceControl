@@ -10,7 +10,7 @@ public class Category
     [Key]
     public int CategoryId { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Nome da categoria é obrigatorio...")]
     [StringLength(40)]
     public string? CategoryName { get; set; }
 

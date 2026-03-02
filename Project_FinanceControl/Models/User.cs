@@ -9,11 +9,11 @@ public class User
     [Key]
     public int UserId { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Nome é obrigatorio")]
     [StringLength(150)]
     public string? UserName { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Informe seu email")]
     [StringLength(200)]
     public string? UserEmail { get; set; }
 
