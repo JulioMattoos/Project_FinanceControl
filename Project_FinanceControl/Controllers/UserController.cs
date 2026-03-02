@@ -25,9 +25,9 @@ public class UserController : ControllerBase
 
     //continuar implementação repository
     [HttpGet("{id:int:min(1)}", Name = "ObterUsuario")]
-    public async Task<ActionResult<User>> Get(int id)
+    public ActionResult<User> GetUserId(int id)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(c => c.UserId == id);
+        var user =  _repository.GetUserById(id);
         if (user == null)
         {
             return NotFound("Usuario não encontrado...");
@@ -36,16 +36,15 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult Post(User user)
+    public ActionResult CreateUser(User user)
     {
         if (user == null)
         {
             return BadRequest();
         }
-        _context.Users.Add(user);
-        _context.SaveChanges();
+        var createdUser = _repository.CreateUser(user);
         return new CreatedAtRouteResult("ObterUsuario",
-            new { id = user.UserId }, user);
+             new { id = createdUser.UserId }, createdUser);
     }
 
     [HttpPut("{id:int:min(1)}/user-update")]
@@ -55,21 +54,18 @@ public class UserController : ControllerBase
         {
             return BadRequest("Id invalido...");
         }
-        _context.Entry(user).State = EntityState.Modified;
-        _context.SaveChanges();
-        return Ok(user);
+        _repository.UpdateUser(user);
+        return Ok("Usuario atualizado com sucesso");
     }
 
     [HttpDelete("{id:int:min(1)}")]
     public ActionResult Delete(int id)
     {
-        var user = _context.Users.Find(id);
+        var user = _repository.DeleteUser(id);
         if (user == null)
         {
             return NotFound("Id invalido");
         }
-        _context.Users.Remove(user);
-        _context.SaveChanges();
-        return Ok("Usuario deletado com sucesso");
+        return Ok("Usuario excluido");
     }
 }
