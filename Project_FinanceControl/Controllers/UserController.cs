@@ -1,6 +1,5 @@
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Project_FinanceControl.Repository;
 
 namespace FinanceCotrol.Controllers;
@@ -23,11 +22,10 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
-    //continuar implementação repository
     [HttpGet("{id:int:min(1)}", Name = "ObterUsuario")]
     public ActionResult<User> GetUserId(int id)
     {
-        var user =  _repository.GetUserById(id);
+        var user = _repository.GetUserById(id);
         if (user == null)
         {
             return NotFound("Usuario não encontrado...");
@@ -55,7 +53,7 @@ public class UserController : ControllerBase
             return BadRequest("Id invalido...");
         }
         _repository.UpdateUser(user);
-        return Ok("Usuario atualizado com sucesso");
+        return Ok(user);
     }
 
     [HttpDelete("{id:int:min(1)}")]

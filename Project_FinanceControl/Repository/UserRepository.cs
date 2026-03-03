@@ -20,7 +20,10 @@ public class UserRepository : IUserRepository
 
     public User GetUserById(int id)
     {
-        return _context.Users.FirstOrDefault(c => c.UserId == id);
+        var user = _context.Users.FirstOrDefault(c => c.UserId == id);
+        if (user == null)
+            throw new KeyNotFoundException($"Usuario com id:{id} não encontrado");
+        return user;
     }
 
     public User CreateUser(User user)
