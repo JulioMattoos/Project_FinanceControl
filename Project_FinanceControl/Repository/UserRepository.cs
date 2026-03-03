@@ -12,6 +12,7 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+
     public IEnumerable<User> GetAllUsers()
     {
         var users = _context.Users.ToList();
