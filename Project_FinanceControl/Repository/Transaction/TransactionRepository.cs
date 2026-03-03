@@ -28,13 +28,12 @@ public class TransactionRepository : ITransactionRepository
         return transaction;
     }
 
-    public TransactionRepository CreateTransaction(Transaction transaction)
+    public Transaction CreateTransaction(Transaction transaction)
     {
-        if (transaction == null)
-            throw new ArgumentNullException(nameof(transaction), "Transação inválida");
+
         _context.Transactions.Add(transaction);
         _context.SaveChanges();
-        return this;
+        return transaction;
     }
 
     public Transaction UpdateTransaction(Transaction transaction)
@@ -42,6 +41,16 @@ public class TransactionRepository : ITransactionRepository
         if (transaction == null)
             throw new AbandonedMutexException(nameof(transaction));
         _context.Entry(transaction).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+        _context.SaveChanges();
+        return transaction;
+    }
+
+    public Transaction DeleteTransaction(int id)
+    {
+        var transaction = _context.Transactions.Find(id);
+        if (transaction == null)
+            throw new ArgumentException(nameof(transaction));
+        _context.Transactions.Remove(transaction);
         _context.SaveChanges();
         return transaction;
     }
