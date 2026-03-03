@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FinanceCotrol.Models;
 
@@ -19,7 +20,10 @@ public class Transaction
     public DateTime Date { get; set; }
     public TransactionType Type { get; set; }
     public int UserId { get; set; }
+    [JsonIgnore]
     public User? User { get; set; }
+    
     public int CategoryId { get; set; }
+    [JsonIgnore]
     public Category? Category { get; set; }
 }
