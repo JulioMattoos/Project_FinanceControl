@@ -2,6 +2,7 @@
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Project_FinanceControl.Repository;
 
 namespace Project_FinanceControl.Controllers
 {
@@ -9,30 +10,24 @@ namespace Project_FinanceControl.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly FinanceDbContext _context;
+        private readonly ICategoryRepository _repository;
 
-        public CategoryController(FinanceDbContext context)
+        public CategoryController(ICategoryRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> Get()
+        public ActionResult<IEnumerable<Category>> Get()
         {
-            var categories = await _context.Categories.Include(c => c.User).Where(c => c.CategoryId <= 30).AsNoTracking().ToListAsync();
-            if (categories == null)
-            {
-                return BadRequest("Categorias não encontradas...");
-            }
-            return Ok(categories);
+            var categories = _repository.GetAllCategories();
+            return Ok(categories);  
         }
 
         [HttpGet("{id:int:min(1)}", Name = "ObterCategoria")]
-        public async Task<ActionResult<Category>> Get(int id)
+        public ActionResult<Category> Get(int id)
         {
-            var category = await _context.Categories
-                .Include(c => c.User).AsNoTracking()
-                .FirstOrDefaultAsync(c => c.CategoryId == id);
+            var category = _repository.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound("Categoria não encontrada...");
@@ -43,14 +38,13 @@ namespace Project_FinanceControl.Controllers
         [HttpPost]
         public ActionResult Post(Category category)
         {
-            if (category == null)
+            if(category == null)
             {
                 return BadRequest();
             }
-            _context.Categories.Add(category);
-            _context.SaveChanges();
+            var categoryCreated = _repository.CreateCategory(category);
             return new CreatedAtRouteResult("ObterCategoria",
-                 new { id = category.CategoryId }, category);
+                 new { id = categoryCreated.CategoryId }, categoryCreated);
         }
 
         [HttpPut("{id:int:min(1)}")]
@@ -60,21 +54,18 @@ namespace Project_FinanceControl.Controllers
             {
                 return BadRequest("Id invalido...");
             }
-            _context.Entry(category).State = EntityState.Modified;
-            _context.SaveChanges();
-            return Ok(category);
+            _repository.UpdateCategory(category);
+            return Ok("Categoria atualizada com sucesso");
         }
 
         [HttpDelete("{id:int:min(1)}")]
         public ActionResult Delete(int id)
         {
-            var category = _context.Categories.FirstOrDefault(c => c.CategoryId == id);
+            var category = _repository.DeleteCategory(id);
             if (category == null)
             {
                 return NotFound("Categoria não encontrada...");
             }
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
             return Ok(category);
         }
     }
