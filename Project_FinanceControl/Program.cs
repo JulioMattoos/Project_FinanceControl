@@ -1,6 +1,6 @@
 using FinanceCotrol.Context;
 using Microsoft.EntityFrameworkCore;
-using Project_FinanceControl.Repository;
+using Project_FinanceControl.Repository.User;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +31,6 @@ builder.Services.AddDbContext<FinanceDbContext>(options =>
     options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
 
 var app = builder.Build();
 

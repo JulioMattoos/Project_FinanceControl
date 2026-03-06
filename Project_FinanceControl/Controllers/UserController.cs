@@ -1,6 +1,6 @@
 using FinanceCotrol.Models;
 using Microsoft.AspNetCore.Mvc;
-using Project_FinanceControl.Repository;
+using Project_FinanceControl.Repository.User;
 
 namespace FinanceCotrol.Controllers;
 
